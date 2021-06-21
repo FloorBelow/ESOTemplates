@@ -1,0 +1,23 @@
+uint version;
+uint width <bgcolor=cDkRed>;
+uint height <bgcolor=cDkRed>;
+ushort unk;
+
+typedef struct {
+    ushort size;
+    char name[size] <bgcolor=cDkAqua>;
+} STRING <read=STRINGRead>;
+ 
+ string STRINGRead( STRING &m )
+ {
+     return m.name;
+ };
+
+
+struct LAYER {
+    byte zero;
+    ushort layerSize <bgcolor=cDkBlue>;
+    STRING name;
+    byte zerotwo;
+    STRING extension;
+} layers[25] <optimize=false>;

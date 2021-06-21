@@ -1,0 +1,40 @@
+//UNFINISHED!
+struct SectionAData {
+    ushort x <bgcolor=cDkGreen>;
+    ushort data <bgcolor=cDkAqua>;
+    uint y <bgcolor=cDkBlue>;
+};
+
+struct SectionAType {
+    char xv4b[4];
+    uint dataCount;
+    uint dataSize;
+    SectionAData data[dataCount];
+};
+
+struct SectionBType {
+    char xv4a[4];
+    char xv4b[4];
+    uint shortCount;
+    uint shortSize;
+    ushort shorts[shortCount] <bgcolor=cDkAqua>;
+};
+
+struct {
+    byte head[4];
+    byte zero;
+    ushort y;
+    ushort x
+    ushort unk1;
+    uint unk2;
+    uint unk3;
+};
+
+
+
+SectionAType SectionA;
+SectionBType SectionB;
+char xv4a[4];
+byte unk[24];
+SectionAType SectionC;
+SectionBType SectionD;

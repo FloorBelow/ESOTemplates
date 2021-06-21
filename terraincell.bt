@@ -1,0 +1,6 @@
+byte unk[198];
+
+struct {
+    ushort a;
+    float cols[65] <bgcolor=cDkRed>;
+} rows[65];

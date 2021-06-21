@@ -1,0 +1,105 @@
+struct Fixture {
+    uint64 id <bgcolor=cDkYellow>;
+    uint flags <bgcolor=cDkBlue>;
+    uint itemGroupID <bgcolor=cDkBlue>;
+    float rotX <bgcolor=cDkBlue>;
+    float rotY <bgcolor=cDkBlue>;
+    float rotZ <bgcolor=cDkBlue>;
+    float posX <bgcolor=cDkRed>;
+    float posY <bgcolor=cDkRed>;
+    float posZ <bgcolor=cDkRed>;
+    uint offsetX <bgcolor=cDkBlue>;
+    uint unk <bgcolor=cDkBlue>;
+    uint offsetY <bgcolor=cDkBlue>;
+};
+
+
+
+typedef struct {
+    Fixture fixture;
+    uint unk1 <bgcolor=cDkAqua>;
+    uint room <bgcolor=cDkAqua>;
+    uint unk2 <bgcolor=cDkAqua>;
+    uint unk3 <bgcolor=cDkAqua>;
+    uint model <bgcolor=cDkPurple>;
+    uint clickable <bgcolor=cDkAqua>;
+    uint unk4 <bgcolor=cDkAqua>;
+    uint unk5 <bgcolor=cDkAqua>;
+    uint unk6 <bgcolor=cDkAqua>;
+    uint unk7 <bgcolor=cDkAqua>;
+    uint unk8 <bgcolor=cDkAqua>;
+} FixturePlaced <read=FixturePlacedRead>;
+ 
+string FixturePlacedRead( FixturePlaced &m ) {
+    string s = "";
+    SPrintf(s, "%d %d %f %f %f",m.fixture.id, m.model, m.fixture.posX, m.fixture.posY, m.fixture.posZ);
+    return s;
+};
+
+typedef struct {
+    Fixture fixture;
+    int unk[65] <bgcolor=cDkGreen>;
+} FixtureLight;
+
+typedef struct {
+    Fixture fixture;
+    uint unk1;
+    uint unk2;
+    uint unk3;
+    uint unk4;
+    float x;
+    float y;
+    float z;
+    uint unkID;
+    float unk6;
+} FixtureUnk;
+
+typedef struct {
+    uint id <bgcolor=cDkYellow>;
+    uint count <bgcolor=cDkBlue>;
+    uint64 furnitureID[count] <bgcolor=cDkBlue>;
+} FixtureGroup;
+
+struct RTreeNode;
+
+struct RTreeLeaf {
+    float boundingBox[6] <bgcolor=cDkPurple>;
+    uint item <bgcolor=cDkBlue>;
+};  
+
+struct RTreeNode{
+    float boundingBox[6] <bgcolor=cDkRed>;
+    uint levelsBelow <bgcolor=cDkGreen>;
+    if(levelsBelow != 0) {
+        uint childCount;
+        RTreeNode children[childCount] <optimize=false>;
+    } else {
+        uint leafCount;
+        RTreeLeaf leaves[leafCount];
+    }
+};
+
+typedef struct {
+    char signature[4] <bgcolor=cDkYellow>;
+    //uint four1 <bgcolor=cDkAqua>;
+    //uint three1 <bgcolor=cDkAqua>;
+    //uint four2 <bgcolor=cDkAqua>;
+    //uint four3 <bgcolor=cDkAqua>;
+    //uint eight1 <bgcolor=cDkAqua>;
+    //uint four5 <bgcolor=cDkAqua>;
+    RTreeNode root;
+} RTree;
+
+uint version;
+uint fixtureCount <bgcolor=cAqua>;
+FixturePlaced fixtures[fixtureCount];
+uint lightCount <bgcolor=cAqua>;
+FixtureLight lights[lightCount];
+uint unkCount <bgcolor=cAqua>;
+FixtureUnk unk[unkCount];
+uint groupCount <bgcolor=cAqua>;
+FixtureGroup groups[groupCount] <optimize=false>;
+RTree tree1;
+RTree tree2;
+RTree tree3;
+RTree tree4;
