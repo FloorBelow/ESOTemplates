@@ -1,6 +1,63 @@
-byte unk[198];
+//DATA SECTIONS
+//0: 65x65   0x4  Heights
+//1: 128x128 0x4  Terrain Tint?
+//2: 128x128 0x4  Material Usage (4 bytes, add to 256)
+//3: 128x128 0x4  Unk
+//4: 128x128 0x4  Unk
+//5: 128x128 0x4  Unk
+//6: 65x65   0x12 Normals
+//7: 64x64   0x4  Unk
+//8: 64x64   0x2  Holes?
+//9:              Unused?
 
 struct {
-    ushort a;
-    float cols[65] <bgcolor=cDkRed>;
-} rows[65];
+    byte head[10] <bgcolor=cDkAqua>;
+    struct {
+        byte section <bgcolor=cDkGreen>;
+        uint id <bgcolor=cDkPurple>;
+        uint size <bgcolor=cDkPurple>;
+    }sections[10];
+    ushort unkSize <bgcolor=cDkAqua>;
+    uint unk[16]  <bgcolor=cDkBlue>;
+    
+    uint oneeightfournineeight1 <bgcolor=cDkAqua>;
+    uint id1 <bgcolor=cDkYellow>;
+    uint oneeightfournineeight2 <bgcolor=cDkAqua>;
+    uint ig;
+} header;
+
+
+
+struct Row {
+    ushort size <bgcolor=cDkBlue>;
+    byte data[size] <bgcolor=cDkAqua>;
+};
+
+struct RowFloat {
+    ushort size <bgcolor=cDkBlue>;
+    float col[size/4] <bgcolor=cDkRed>;
+};
+
+struct RowInt {
+    ushort size <bgcolor=cDkBlue>;
+    int data[size/4] <bgcolor=cDkAqua>;
+};
+
+struct Section(int type) {
+    local int type = type;
+    uint sig1 <bgcolor=cDkYellow>;
+    uint rows1 <bgcolor=cDkGreen>;
+    uint rows2 <bgcolor=cDkGreen>;
+    uint rowSize <bgcolor=cDkGreen>;
+    if(type == 0 || type == 6) RowFloat row[rows1];
+    else Row row[rows1];
+    uint sig2 <bgcolor=cDkYellow>;
+};
+
+
+local int i;
+for(i = 0; i < 10; i++) {
+    if(header.sections[i].size != 0)
+        Section section(i);
+}
+
