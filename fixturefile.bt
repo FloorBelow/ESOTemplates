@@ -15,7 +15,7 @@ struct Fixture {
 
 
 
-typedef struct {
+typedef struct (uint version) {
     Fixture fixture;
     uint unk1 <bgcolor=cDkAqua>;
     uint room <bgcolor=cDkAqua>;
@@ -24,10 +24,12 @@ typedef struct {
     uint model <bgcolor=cDkPurple>;
     uint clickable <bgcolor=cDkAqua>;
     uint unk4 <bgcolor=cDkAqua>;
-    uint unk5 <bgcolor=cDkAqua>;
-    uint unk6 <bgcolor=cDkAqua>;
-    uint unk7 <bgcolor=cDkAqua>;
-    uint unk8 <bgcolor=cDkAqua>;
+    if(version != 22) {
+        uint unk5 <bgcolor=cDkAqua>;
+        uint unk6 <bgcolor=cDkAqua>;
+        uint unk7 <bgcolor=cDkAqua>;
+        uint unk8 <bgcolor=cDkAqua>;
+    }
 } FixturePlaced <read=FixturePlacedRead>;
  
 string FixturePlacedRead( FixturePlaced &m ) {
@@ -92,7 +94,7 @@ typedef struct {
 
 uint version;
 uint fixtureCount <bgcolor=cAqua>;
-FixturePlaced fixtures[fixtureCount];
+FixturePlaced fixtures(version)[fixtureCount];
 uint lightCount <bgcolor=cAqua>;
 FixtureLight lights[lightCount];
 uint unkCount <bgcolor=cAqua>;

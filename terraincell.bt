@@ -1,22 +1,23 @@
 //DATA SECTIONS
 //0: 65x65   0x4  Heights
-//1: 128x128 0x4  Terrain Tint?
-//2: 128x128 0x4  Material Usage (4 bytes, add to 256)
-//3: 128x128 0x4  Unk
+//1: 128x128 0x4  Terrain Tint
+//2: 128x128 0x4  Materials 1 
+//3: 128x128 0x4  Materials 2 (bytes from materials should add to 256? unless base tex)
 //4: 128x128 0x4  Unk
-//5: 128x128 0x4  Unk
+//5: 128x128 0x4  Unk (I swear I have never seen these two not be zeroes)
 //6: 65x65   0x12 Normals
-//7: 64x64   0x4  Unk
-//8: 64x64   0x2  Holes?
-//9:              Unused?
+//7: 128x128 0x4  Materials 3 (most worlds don't use this)
+//8: 64x64   0x4  Unk
+//9: 64x64   0x2  Holes?
 
 struct {
-    byte head[10] <bgcolor=cDkAqua>;
+    byte head[9] <bgcolor=cDkAqua>;
+    byte sectionCount;
     struct {
         byte section <bgcolor=cDkGreen>;
         uint id <bgcolor=cDkPurple>;
         uint size <bgcolor=cDkPurple>;
-    }sections[10];
+    }sections[sectionCount];
     ushort unkSize <bgcolor=cDkAqua>;
     uint unk[16]  <bgcolor=cDkBlue>;
     
@@ -56,7 +57,7 @@ struct Section(int type) {
 
 
 local int i;
-for(i = 0; i < 10; i++) {
+for(i = 0; i < header.sectionCount; i++) {
     if(header.sections[i].size != 0)
         Section section(i);
 }

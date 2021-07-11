@@ -1,0 +1,11 @@
+struct {
+    uint version;
+    uint recordCount;
+} header;
+
+struct {
+    uint type;
+    uint unk;
+    uint id;
+    uint offset;
+} records[header.recordCount];
