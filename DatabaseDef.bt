@@ -162,6 +162,43 @@ struct ItemSet {
     byte zero <bgcolor=cRed>;
 };
 
+struct TerrainTexture {
+    uint static1;
+    uint zero1;
+    uint important <bgcolor=cDkYellow>;
+    uint id2;
+    uint id3;
+    uint zero2;
+};
+
+struct ItemVisualTemplate {
+    
+    struct Material {
+        uint unk1;
+        uint tint[3] <bgcolor=cDkRed>;
+        uint assetID1 <bgcolor=cDkGreen>;
+        uint assetID2 <bgcolor=cDkGreen>;
+        uint itemPartMaterialID1 <bgcolor=cDkBlue>;
+        uint itemPartMaterialID2 <bgcolor=cDkBlue>;
+        byte unk[23] <bgcolor=cDkPurple>;
+    };
+    uint material1Count;
+    Material materials1[material1Count];
+    uint material2Count <bgcolor=cBlue>;
+    Material materials2[material2Count];
+    uint material3Count <bgcolor=cBlue>;
+    Material materials3[material3Count];
+    uint data[45];
+};
+
+struct ItemPartMaterial {
+    uint id1;
+    uint id2;
+    uint id3;
+    uint id4;
+    byte zero<hidden=true>;
+};
+
 BigEndian();
 char magic[4] <hidden=true>;
 uint version <hidden=true>;
@@ -175,7 +212,7 @@ for(i = 0; i < numRecords; i++) {
     RowHeader header2 <hidden=true>;
     offset = FTell();
     Row row;
-    ItemSet data;
+    Zone data;
     FSeek(header2.dataSize + offset);
 }
 
