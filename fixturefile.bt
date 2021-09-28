@@ -49,11 +49,11 @@ typedef struct {
     uint unk2;
     uint unk3;
     uint unk4;
-    float x;
-    float y;
-    float z;
+    float x <bgcolor=cDkRed>;
+    float y <bgcolor=cDkRed>;
+    float z <bgcolor=cDkRed>;
     uint unkID;
-    float unk6;
+    uint zero;
 } FixtureUnk;
 
 typedef struct {

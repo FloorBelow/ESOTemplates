@@ -115,6 +115,21 @@ struct Quest {
     uint64 zero3 <hidden=true>;
 };
 
+struct QuestStep {
+    uint unk1;
+    uint unk2;
+    IDArray questConditions;
+    uint endingID;
+    IDArray failConditions;
+    byte optional;
+    byte allowAutoAdvance;
+    byte transient;
+    byte questToolGroupShared;
+    byte hideQuestTimer;
+    byte unk3;
+    IDArray optionalSteps;
+};
+
 struct Zone {
     uint zoneSetID;
     uint colorCount;
@@ -124,12 +139,24 @@ struct Zone {
     uint mapID;
     uint poiCount;
     uint pois[poiCount] <bgcolor=cDkGreen>;
-    uint unk2[2];
+    uint somethingCount;
+    uint somethings[somethingCount];
+    uint unk2;
+    uint unk3;
     uint graveyardCount;
     uint graveyards[graveyardCount];
-    uint loadingScreen;
-    uint unk3;
+    uint loadingScreen <bgcolor=cDkYellow>;
+    uint unk4;
     uint parentWorld <bgcolor=cBlue>;
+    uint unk6;
+    uint unk7;
+    LittleEndian();
+    float scaleX <bgcolor=cDkRed>;
+    float scaleY <bgcolor=cDkRed>;
+    BigEndian();
+    int offsetX <bgcolor=cDkRed>;
+    int offsetY <bgcolor=cDkRed>;
+    
 };
 
 struct ItemSet {
@@ -197,6 +224,59 @@ struct ItemPartMaterial {
     uint id3;
     uint id4;
     byte zero<hidden=true>;
+};
+
+struct Book {
+    uint count;
+    uint unk[count*2];
+    uint zero2;
+    uint small;
+    uint collectionID <bgcolor=cDkBlue>;
+};
+
+struct Map {
+
+    //should be cppstr
+    ushort pathSize <hidden=true>;
+    char path[pathSize];
+    byte zero <hidden=true>;
+    
+    byte tilesX;
+    byte tilesY;
+    ushort tileRes;
+
+    //divided by 100, tamriel is moved 3500 upwards
+    uint sizeX <bgcolor=cGreen>;
+    uint sizeY <bgcolor=cGreen>;
+    int posX <bgcolor=cAqua>;
+    int posY <bgcolor=cAqua>;
+
+    uint zoneID <bgcolor=cDkBlue>;
+    uint unk5;
+    uint enum1;
+    uint parentMapID <bgcolor=cDkBlue>;
+    uint unk6;
+    
+    uint blobCount;
+    struct {
+        uint texture <bgcolor=cDkRed>;
+        uint mapID <bgcolor=cDkBlue>;
+        int sizeX;
+        int sizeY;
+        int posX;
+        int posY;
+    } blobs[blobCount];
+
+    IDArray locations;
+
+    uint unk7;
+    uint enum2;
+    uint enum3;
+    uint unk8;
+    byte disablePOIs;
+    uint unk9;
+    
+    
 };
 
 BigEndian();
