@@ -130,22 +130,20 @@ struct QuestStep {
     IDArray optionalSteps;
 };
 
-struct Zone {
+struct Zone (uint version) {
     uint zoneSetID;
     uint colorCount;
     float color[colorCount] <bgcolor=cDkRed>;
     uint worldID <bgcolor=cBlue>;
     byte unk[14];
+    if(version > 141) byte unk;
     uint mapID;
-    uint poiCount;
-    uint pois[poiCount] <bgcolor=cDkGreen>;
-    uint somethingCount;
-    uint somethings[somethingCount];
-    uint unk2;
+    IDArray pois;
+    IDArray skyshards;
+    uint unk2; //2 if cyrodiil, 0 else?
     uint unk3;
-    uint graveyardCount;
-    uint graveyards[graveyardCount];
-    uint loadingScreen <bgcolor=cDkYellow>;
+    IDArray graveyards;
+    uint loadingScreen <bgcolor=cYellow>;
     uint unk4;
     uint parentWorld <bgcolor=cBlue>;
     uint unk6;
@@ -156,7 +154,72 @@ struct Zone {
     BigEndian();
     int offsetX <bgcolor=cDkRed>;
     int offsetY <bgcolor=cDkRed>;
+
+    uint unk8;
+    uint unk9;
+    uint worldPositonNodeID <bgcolor=cBlue>;
+
+    uint unk11; //dunno
+    uint unk12;
+    uint unk13;
+    uint monsterModifierID <bgcolor=cBlue>; //0 dungeons, dragonguard temples, 2138 everywhere else
+    uint zero <hidden=true>;
+    uint unk16;
+
+    ushort short1;
+    ushort short2;
+
+    uint unk17;
+    IDArray zoneOffsetSliceVolumes; //0x131 - map offsets
+
+    uint unk18;
+    uint unk19;
+    uint unk20Count;
+    uint unk20[unk20Count];
+    uint unk21;
+    uint unk22;
+    uint ikRulesetOverrideCount;
+    uint ikRulesetOverrides[ikRulesetOverrideCount] <bgcolor=cDkBlue>;
+
+    uint unkLevelRelated;
+    uint unk24Count;
+    uint unk24[unk24Count * 3];
+
+
+    LittleEndian();
+    float f1 <bgcolor=cDkRed>;
+    float f2 <bgcolor=cDkRed>;
+    float f3 <bgcolor=cDkRed>;
+    BigEndian();
     
+    uint zoneStoryBackgroundAsset <bgcolor=cYellow>;    
+    uint zoneStoryGPBackgroundAsset <bgcolor=cYellow>; 
+
+    IDArray childZones;
+    //IDArray array2;
+    uint const15 <hidden=true>;
+    uint veteran1;
+    uint veteran2;
+    uint veteran3;
+    IDArray achievements; //quests, pup dung, group dung, fish?
+    uint z2 <hidden=true>;
+    IDArray delveAchievements;
+    uint z3 <hidden=true>;
+    IDArray skyshardAchievements; //Deadlands only?
+    uint64 z4 <hidden=true>;
+    IDArray strikingLocaleAchievements;
+    uint64 z5 <hidden=true>;
+    uint64 z6 <hidden=true>;
+    IDArray array2;
+    IDArray array3; //0x191 not sure
+    IDArray pointerQuests;
+    uint parentZoneID <bgcolor=cBlue>;
+    uint unk29ID; //either 1a0 or 19f
+    LittleEndian();
+    float f4 <bgcolor=cDkRed>; //13 halls of colossus, 1 everywhere else
+    BigEndian();
+    uint unk30;
+
 };
 
 struct ItemSet {
@@ -228,10 +291,15 @@ struct ItemPartMaterial {
 
 struct Book {
     uint count;
+    //
     uint unk[count*2];
-    uint zero2;
-    uint small;
-    uint collectionID <bgcolor=cDkBlue>;
+    uint monsterID <bgcolor=cBlue>;
+    uint fontOrBackground;
+    uint collectionID <bgcolor=cBlue>;
+    uint iconAsset <bgcolor=cYellow>;
+    uint isLorebook;
+    byte bool1;
+    uint zero <hidden=true>;
 };
 
 struct Map {
@@ -279,11 +347,51 @@ struct Map {
     
 };
 
+struct WorldPositionNode {
+    uint z1;
+    uint z2;
+    uint z3;
+    uint z4;
+    uint doorCount;
+    struct {
+        uint unk;
+        uint doorID <bgcolor=cBlue>;
+        uint requirementID;
+        byte teleport;
+    } doors[doorCount];
+    uint colorCount;
+    LittleEndian();
+    float r <bgcolor=cDkRed>;
+    float g <bgcolor=cDkRed>;
+    float b <bgcolor=cDkRed>;
+    float a <bgcolor=cDkRed>;
+    BigEndian();
+};
+
+struct Door {
+    uint countIs2;
+    uint x1 <bgcolor=cDkGreen>;
+    uint y1 <bgcolor=cDkGreen>;
+    uint x2 <bgcolor=cDkGreen>;
+    uint y2 <bgcolor=cDkGreen>;
+    LittleEndian();
+    float f <bgcolor=cDkRed>;
+    BigEndian();
+    uint requirementListID <bgcolor=cBlue>;
+    uint unk;
+    uint worldPositionNodeID <bgcolor=cBlue>;
+};
+
+
+struct Clickable {
+    IDArray books;
+};
+
 BigEndian();
 char magic[4] <hidden=true>;
 uint version <hidden=true>;
 uint numRecords;
-uint unk2 <hidden=true>;
+uint defVersion;
 
 local int i;
 local int offset;
@@ -292,7 +400,7 @@ for(i = 0; i < numRecords; i++) {
     RowHeader header2 <hidden=true>;
     offset = FTell();
     Row row;
-    Zone data;
+    Zone data(defVersion);
     FSeek(header2.dataSize + offset);
 }
 
